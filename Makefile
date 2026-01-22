@@ -1,13 +1,13 @@
 build: main.c
 	mkdir build
-	gcc -g -Wall -Werror main.c shell.c -lm
-	mv a.out ./build
+	gcc -o crsh -std=c23 -g -Wall -Werror -Wconversion -fanalyzer -fsanitize=address,undefined,leak -fsanitize-trap=undefined main.c
+	mv crsh ./build
 
 debug: clean build
-	gdb ./build/a.out
+	gdb ./build/crsh
 
 run: clean build
-	./build/a.out
+	./build/crsh
 
 clean:
 	rm -rf ./build
