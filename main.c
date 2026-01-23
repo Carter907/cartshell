@@ -10,22 +10,20 @@
 #define DELIM_WHITESPACE (" \t\r\n")
 
 
-void read_line(char **ln) {
+int read_line(char **ln) {
 
 	size_t ln_sz = 0;
+	char* targ = nullptr;
 
-	char* target = nullptr;
-
-	if (getline(&target, &ln_sz, stdin) != -1) {
-		*ln = target;	
-		return;
+	if (getline(&targ, &ln_sz, stdin) != -1) {
+		*ln = targ;		
+		return 0;
 	}
 
 	if (feof(stdin)) 
 		exit(EXIT_SUCCESS);
 	
-	perror("read_line()");
-	exit(EXIT_FAILURE);
+	return -1;
 }
 
 
@@ -44,7 +42,7 @@ size_t split_line(char ***split_ln, size_t *split_ln_sz, char *ln) {
 			*split_ln = realloc(*split_ln, sizeof(char*) * (*split_ln_sz));			
 
 			if (*split_ln == nullptr) {
-				perror("realloc");
+				perror("realloc()");
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -59,10 +57,10 @@ size_t split_line(char ***split_ln, size_t *split_ln_sz, char *ln) {
 
 int shell_task() {
 
-	char *ln;
+	char *ln = nullptr;
 
 	size_t args_cap = ARGS_BUFF_SIZE;
-	size_t args_sz;
+	size_t args_sz = 0;
 
 	char **args = malloc(sizeof(char*) * args_cap);
 
@@ -74,7 +72,11 @@ int shell_task() {
 	while (true) {
 
 		printf("> ");
-		read_line(&ln);
+		int rt = read_line(&ln);
+		if (rt == -1) {
+			perror("readline()");
+			exit(EXIT_FAILURE);
+		}
 		char *split_ln = strdup(ln);
 		args_sz = split_line(&args, &args_cap, split_ln);
 		
