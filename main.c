@@ -60,7 +60,7 @@ int shell_task() {
 	char *ln = nullptr;
 
 	size_t args_cap = ARGS_BUFF_SIZE;
-	size_t args_sz = 0;
+	[[maybe_unused]]size_t args_sz = 0;
 
 	char **args = malloc(sizeof(char*) * args_cap);
 
@@ -80,9 +80,6 @@ int shell_task() {
 		char *split_ln = strdup(ln);
 		args_sz = split_line(&args, &args_cap, split_ln);
 		
-		printf("line %s", ln);
-		printf("size %ld\n", args_sz);
-
 		free(ln);
 		free(split_ln);
 		free(args);
