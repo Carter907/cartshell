@@ -81,8 +81,11 @@ int shell_task() {
 		args_sz = split_line(&args, &args_cap, split_ln);
 		
 		free(ln);
+        ln = nullptr;
 		free(split_ln);
+        split_ln = nullptr;
 		free(args);
+        args = nullptr;
 	}
 
 	return 0;
