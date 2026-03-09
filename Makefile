@@ -2,7 +2,7 @@ CC = gcc
 CD = gdb
 
 PROG = crsh
-SOURCES = main.c
+SOURCES = main.c builtin.c
 
 VER = c23
 

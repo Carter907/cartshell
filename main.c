@@ -1,10 +1,12 @@
-#define _XOPEN_SOURCE 700
+#define _GNU_SOURCE
 
 #include <stddef.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "builtin.h"
 
 #define ARGS_BUFF_SIZE 256
 #define DELIM_WHITESPACE (" \t\r\n")
@@ -59,17 +61,26 @@ size_t split_line(char ***split_ln, size_t *split_ln_sz, char *ln) {
 	return pos;
 }
 
+void handle_command(char **split_ln) {
+
+    for (int i = 0; i < BASE_COMMANDS_COUNT; i++) {
+            
+        if (strcmp(split_ln[0], base_cmnds_strs[i]) == 0) {
+            base_cmnds_ft[i]((void*)(split_ln + 1)); 
+        }
+    }
+}
 
 int shell_task() {
 
 	char *ln = nullptr;
 
-	size_t args_cap = ARGS_BUFF_SIZE;
-	[[maybe_unused]]size_t args_sz = 0;
+	size_t cmnd_cap = ARGS_BUFF_SIZE;
+	[[maybe_unused]]size_t cmnd_size = 0;
 
-	char **args = malloc(sizeof(char*) * args_cap);
+	char **cmnd_split = malloc(sizeof(char*) * cmnd_cap);
 
-	if (args == nullptr) {
+	if (cmnd_split == nullptr) {
 		perror("malloc()");
 		exit(EXIT_FAILURE);
 	}
@@ -83,17 +94,21 @@ int shell_task() {
 			perror("readline()");
 			exit(EXIT_FAILURE);
 		}
-		char *split_ln = strdup(ln);
-		args_sz = split_line(&args, &args_cap, split_ln);
+
+		char *input_ln = strdup(ln);
+
+		cmnd_size = split_line(&cmnd_split, &cmnd_cap, input_ln);
+
+        handle_command(cmnd_split); 
 		
 		free(ln);
         ln = nullptr;
-		free(split_ln);
-        split_ln = nullptr;
-		free(args);
-        args = nullptr;
+		free(input_ln);
+        input_ln = nullptr;
+		free(cmnd_split);
+        cmnd_split = nullptr;
 	}
-
+ 
 	return 0;
 }
 
