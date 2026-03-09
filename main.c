@@ -29,6 +29,10 @@ int read_line(char **ln) {
 
 size_t split_line(char ***split_ln, size_t *split_ln_sz, char *ln) {
 
+    if (*split_ln == nullptr) {
+        *split_ln = malloc(sizeof(char*) * ARGS_BUFF_SIZE);
+    }
+
 	size_t pos = 0;	
 	char* tok = strtok(ln, DELIM_WHITESPACE);
 		
@@ -36,6 +40,7 @@ size_t split_line(char ***split_ln, size_t *split_ln_sz, char *ln) {
 	
 		(*split_ln)[pos] = tok;
 		pos++;
+
 		if (pos == *split_ln_sz) {
 
 			(*split_ln_sz) *= 2;
@@ -73,6 +78,7 @@ int shell_task() {
 
 		printf("> ");
 		int rt = read_line(&ln);
+
 		if (rt == -1) {
 			perror("readline()");
 			exit(EXIT_FAILURE);
