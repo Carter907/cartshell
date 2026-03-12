@@ -8,7 +8,7 @@
 
 typedef enum _base_cmnd_t {
 	EXIT = 0,
-	ECHO = 1,
+    ECHO = 1,
 	NOW_TM = 2,
 	SCHED_TM = 3,
 } base_cmnd_t;
