@@ -4,8 +4,9 @@
 #include <time.h>
 #include <stdlib.h>
 
-void (*base_cmnds_ft[BASE_COMMANDS_COUNT])(void*) = { exit_cmnd, echo_cmnd, timenow_cmnd, schedtime_cmnd };
+builtin_cmnd* base_cmnds_ft[BASE_COMMANDS_COUNT] = { exit_cmnd, echo_cmnd, timenow_cmnd, schedtime_cmnd };
 char* base_cmnds_strs[BASE_COMMANDS_COUNT] = { "exit", "echo", "timenow", "schedtime" };
+
 
 void echo_cmnd(void * args) {
 	char** output = (char**) args;

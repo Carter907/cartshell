@@ -31,9 +31,9 @@ int read_line(char **ln) {
 
 size_t split_line(char ***split_ln, size_t *split_ln_sz, char *ln) {
 
-  if (*split_ln == nullptr) {
+  	if (*split_ln == nullptr) {
 		*split_ln = malloc(sizeof(char*) * ARGS_BUFF_SIZE);
-  }
+  	}
 
 	size_t pos = 0;	
 	char* tok = strtok(ln, DELIM_WHITESPACE);
@@ -99,14 +99,14 @@ int shell_task() {
 
 		cmnd_size = split_line(&cmnd_split, &cmnd_cap, input_ln);
 
-    handle_command(cmnd_split); 
+    	handle_command(cmnd_split); 
 		
 		free(ln);
-    ln = nullptr;
+    	ln = nullptr;
 		free(input_ln);
-    input_ln = nullptr;
+	    input_ln = nullptr;
 		free(cmnd_split);
-    cmnd_split = nullptr;
+		cmnd_split = nullptr;
 	}
  
 	return 0;
