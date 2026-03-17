@@ -10,7 +10,7 @@ One goal I have for this project is to make it POSIX compliant. Here are some wa
 Since simplicity and scalability will be a guiding-principle of this project, developers can fork this repository to make their own shells with different builtins or other functionality.
 
 ### State Diagram
-<img width="400" height="390" alt="image" src="https://github.com/user-attachments/assets/b83b6d3f-3180-4809-9bc9-cf0040829994" />
+<img width="595" height="547" alt="image" src="https://github.com/user-attachments/assets/3a9a2422-0319-4223-8a0f-332d2ec78140" />
 
 ### Executing the program
 
