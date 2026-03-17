@@ -1,4 +1,4 @@
-#define _GNU_SOURCE
+#define _XOPEN_SOURCE 700
 
 #include <stddef.h>
 #include <string.h>
@@ -8,24 +8,43 @@
 
 #include "builtin.h"
 
-#define ARGS_BUFF_SIZE 256
+#define ARGS_BUFF_SIZE (256)
 #define DELIM_WHITESPACE (" \t\r\n")
 
+#define LINE_BUFF_SIZE (64)
 
 int read_line(char **ln) {
 
 	size_t ln_sz = 0;
-	char* targ = nullptr;
+	size_t buff_cap = LINE_BUFF_SIZE;
 
-	if (getline(&targ, &ln_sz, stdin) != -1) {
-		*ln = targ;		
-		return 0;
-	}
-
-	if (feof(stdin)) 
-		exit(EXIT_SUCCESS);
+	*ln = malloc(sizeof(char) * LINE_BUFF_SIZE);
 	
-	return -1;
+	int next_char;	
+
+	while ((next_char = getchar()) != EOF) {
+	
+		char ch = (char)next_char;
+		(*ln)[ln_sz++] = ch;
+
+		if (ln_sz == buff_cap) {
+			buff_cap *= 2;
+			*ln = realloc(*ln, sizeof(char) * buff_cap);
+		};
+
+		if (next_char == '\n')
+			break;
+	};
+	
+	if (feof(stdin)) {
+		free(*ln);
+		return -1;
+	}
+		
+	
+	(*ln)[ln_sz] = '\0';
+
+	return 0;
 }
 
 
