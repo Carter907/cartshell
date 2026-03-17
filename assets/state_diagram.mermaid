@@ -1,0 +1,69 @@
+stateDiagram-v2
+    direction TB
+    shell_t: Shell Task
+
+    state read_line {
+
+        malloc: malloc ln
+        set_nt: set null terminator
+        lp1: loop
+        
+        [*] --> malloc
+        malloc --> lp1
+        lp1 --> resize: if size is capacity
+        resize --> lp1
+        lp1 --> break: if newline or EOF
+        break --> set_nt
+        
+
+    }
+
+    state split_line {
+
+        [*] --> loop: loop while tok != null
+        loop --> strtok(): assign tok to split_ln
+        strtok() --> loop: assign tok to next token
+
+    }
+
+    state handle_command {
+        f1: for each builtin
+        state cmd_choice <<choice>>
+        state fpf <<fork>>
+
+        [*] --> f1
+        f1 --> cmd_choice: strcmp with builtins
+        cmd_choice --> fpf
+
+        fpf --> echo: op == echo
+        fpf --> exit: op == exit
+        fpf --> schedtime: op == schedtime
+        fpf --> timenow: op == timenow
+        fpf --> ...: op == nth builtin
+        
+
+        state fpj <<join>>
+
+        ... --> fpj
+        echo --> fpj
+        exit --> fpj
+        schedtime --> fpj
+        timenow --> fpj
+        fpj --> [*]: execute command
+        
+    
+
+    }
+    
+    [*] --> shell_t
+    shell_t --> prompt
+    prompt --> fetch
+
+    fetch --> decode
+
+    decode --> execute
+
+    execute --> prompt
+    execute --> [*]: exit called
+    
+    
