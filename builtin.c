@@ -5,26 +5,13 @@
 #include <time.h>
 
 builtin_cmnd *base_cmnds_ft[BASE_COMMANDS_COUNT] = {
-    exit_cmnd, echo_cmnd, timenow_cmnd, schedtime_cmnd};
+    exit_cmnd, schedtime_cmnd};
 
-char *base_cmnds_strs[BASE_COMMANDS_COUNT] = {"exit", "echo", "timenow",
+char *base_cmnds_strs[BASE_COMMANDS_COUNT] = {"exit",
                                               "schedtime"};
-
-// echo command: prints the next argument
-void echo_cmnd(void *args) {
-  char **output = (char **)args;
-
-  printf("%s\n", *output);
-}
 
 // exit command: exits the shell
 void exit_cmnd(void *args) { exit(EXIT_SUCCESS); }
-
-void timenow_cmnd(void *args) {
-
-  time_t tm = time(NULL);
-  printf("%s", ctime(&tm));
-}
 
 void schedtime_cmnd(void *args) {
 

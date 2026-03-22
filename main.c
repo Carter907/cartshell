@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #include "builtin.h"
 
@@ -12,6 +13,8 @@
 #define DELIM_WHITESPACE (" \t\r\n")
 
 #define LINE_BUFF_SIZE (64)
+
+const char *SHELL_PROMPT_STR = "carsh->";
 
 int read_line(char **ln) {
 
@@ -75,7 +78,30 @@ size_t split_line(char ***split_ln, size_t *split_ln_sz, char *ln) {
 
   } while (tok != nullptr);
 
+	(*split_ln)[pos] = (char *) NULL;
+
   return pos;
+}
+
+void launch_command(char **args) {
+
+	pid_t pid = fork();
+	switch (pid) {
+		case 0:
+			char path[50];
+			sprintf(path, "/usr/bin/%s", *args);
+			if (execvp(path, (args)) == -1) {
+				perror("execvp()");
+			}
+			break;
+		default:
+			wait(NULL);
+			break;
+		case -1:
+			perror("fork()");		
+			exit(-1);
+			break;
+	}
 }
 
 void handle_command(char **split_ln) {
@@ -84,8 +110,10 @@ void handle_command(char **split_ln) {
 
     if (strcmp(split_ln[0], base_cmnds_strs[i]) == 0) {
       base_cmnds_ft[i]((void *)(split_ln + 1));
+			return;
     }
   }
+	launch_command(split_ln);			
 }
 
 int shell_task() {
@@ -104,7 +132,7 @@ int shell_task() {
 
   while (true) {
 
-    printf("> ");
+    printf("%s ", SHELL_PROMPT_STR);
     int rt = read_line(&ln);
 
     if (rt == -1) {
