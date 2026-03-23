@@ -2,7 +2,7 @@ CC = gcc
 CD = gdb
 
 PROG = crsh
-SOURCES = main.c builtin.c
+SOURCES = src/main.c src/builtin.c
 
 VER = c23
 
@@ -13,10 +13,13 @@ CFLAGS = -std=$(VER) -g -Wall -Werror -Wconversion -fanalyzer -fsanitize=address
 run: build
 	$(BUILD_DIR)/$(PROG)
 
-build: main.c
+build: $(SOURCES) 
 	mkdir -p $(BUILD_DIR)
 	$(CC) -o $(PROG) $(CFLAGS) $(SOURCES)
 	mv $(PROG) $(BUILD_DIR) 
+
+format:
+	clang-format -i $(SOURCES)
 
 clean:
 	rm -rf $(BUILD_DIR)

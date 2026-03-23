@@ -4,11 +4,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-builtin_cmnd *base_cmnds_ft[BASE_COMMANDS_COUNT] = {
-    exit_cmnd, schedtime_cmnd};
+builtin_cmnd *base_cmnds_ft[BASE_COMMANDS_COUNT] = {exit_cmnd, schedtime_cmnd};
 
-char *base_cmnds_strs[BASE_COMMANDS_COUNT] = {"exit",
-                                              "schedtime"};
+char *base_cmnds_strs[BASE_COMMANDS_COUNT] = {"exit", "schedtime"};
 
 // exit command: exits the shell
 void exit_cmnd(void *args) { exit(EXIT_SUCCESS); }

@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
 #include "builtin.h"
 
@@ -78,30 +78,30 @@ size_t split_line(char ***split_ln, size_t *split_ln_sz, char *ln) {
 
   } while (tok != nullptr);
 
-	(*split_ln)[pos] = (char *) NULL;
+  (*split_ln)[pos] = (char *)NULL;
 
   return pos;
 }
 
 void launch_command(char **args) {
 
-	pid_t pid = fork();
-	switch (pid) {
-		case 0:
-			char path[50];
-			sprintf(path, "/usr/bin/%s", *args);
-			if (execvp(path, (args)) == -1) {
-				perror("execvp()");
-			}
-			break;
-		default:
-			wait(NULL);
-			break;
-		case -1:
-			perror("fork()");		
-			exit(-1);
-			break;
-	}
+  pid_t pid = fork();
+  switch (pid) {
+  case 0:
+    char path[50];
+    sprintf(path, "/usr/bin/%s", *args);
+    if (execvp(path, (args)) == -1) {
+      perror("execvp()");
+    }
+    break;
+  default:
+    wait(NULL);
+    break;
+  case -1:
+    perror("fork()");
+    exit(-1);
+    break;
+  }
 }
 
 void handle_command(char **split_ln) {
@@ -110,10 +110,10 @@ void handle_command(char **split_ln) {
 
     if (strcmp(split_ln[0], base_cmnds_strs[i]) == 0) {
       base_cmnds_ft[i]((void *)(split_ln + 1));
-			return;
+      return;
     }
   }
-	launch_command(split_ln);			
+  launch_command(split_ln);
 }
 
 int shell_task() {
