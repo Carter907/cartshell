@@ -88,18 +88,24 @@ void launch_command(char **args) {
   pid_t pid = fork();
   switch (pid) {
   case 0:
-    char path[50];
-    sprintf(path, "/usr/bin/%s", *args);
+		size_t path_len = strlen("/usr/bin/") + strlen(*args) + 1;
+    char *path = malloc(path_len);
+		if (path == NULL) {
+			perror("malloc");
+			_exit(EXIT_FAILURE);
+		}
+    snprintf(path, path_len, "/usr/bin/%s", *args);
     if (execvp(path, (args)) == -1) {
-      perror("execvp()");
+      perror("execvp");
+      _exit(EXIT_FAILURE);
     }
     break;
   default:
     wait(NULL);
     break;
   case -1:
-    perror("fork()");
-    exit(-1);
+    perror("fork");
+    _exit(EXIT_FAILURE);
     break;
   }
 }
