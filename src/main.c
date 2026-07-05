@@ -88,12 +88,12 @@ void launch_command(char **args) {
   pid_t pid = fork();
   switch (pid) {
   case 0:
-		size_t path_len = strlen("/usr/bin/") + strlen(*args) + 1;
+    size_t path_len = strlen("/usr/bin/") + strlen(*args) + 1;
     char *path = malloc(path_len);
-		if (path == NULL) {
-			perror("malloc");
-			_exit(EXIT_FAILURE);
-		}
+    if (path == NULL) {
+      perror("malloc");
+      _exit(EXIT_FAILURE);
+    }
     snprintf(path, path_len, "/usr/bin/%s", *args);
     if (execvp(path, (args)) == -1) {
       perror("execvp");
